@@ -68,3 +68,9 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+/////////////////////////////////////////////////////////////////
+
+npm install -g concurrently
+npm install -g concurrently concurrently는 여러 명령어를 동시에 실행할 수 있게 도와주는 Node.js 패키지입니다. 주로 개발 환경에서 프론트엔드와 백엔드를 같이 실행하거나, 여러 명령어를 병렬로 실행할 때 사용됩니다.

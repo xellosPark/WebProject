@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3000'); // 서버 주소에 맞게 변경
+// 서버 주소를 변수로 정의
+const serverUrl = 'http://localhost:3001';
+const socket = io(serverUrl);
 
 function App() {
   const [messages, setMessages] = useState([]);
