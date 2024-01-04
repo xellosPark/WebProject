@@ -1,49 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
-// 서버 주소를 변수로 정의
-const serverUrl = 'http://localhost:3001';
-const socket = io(serverUrl);
+io.on('connection', (socket) => {
+  console.log('사용자가 연결되었습니다.');
 
-function App() {
-  const [messages, setMessages] = useState([]);
-  const [messageInput, setMessageInput] = useState('');
+  // 클라이언트에서 메시지를 받았을 때
+  socket.on('chat message', (message) => {
+    console.log('메시지 받음:', message);
 
-  useEffect(() => {
-    // 서버에서 'chat message' 이벤트를 수신하면 새 메시지를 추가
-    socket.on('chat message', (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
+    // 모든 클라이언트에게 메시지를 다시 전송
+    io.emit('chat message', message);
+  });
 
-    // 컴포넌트가 언마운트 될 때 이벤트 리스너 정리
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  // 연결이 끊어졌을 때
+  socket.on('disconnect', () => {
+    console.log('사용자가 연결을 끊었습니다.');
+  });
+});
 
-  const sendMessage = () => {
-    // 서버로 'chat message' 이벤트와 메시지 내용을 전송
-    socket.emit('chat message', messageInput);
+const PORT = process.env.PORT || 3001;
 
-    // 입력 필드 비우기
-    setMessageInput('');
-  };
-
-  return (
-    <div>
-      <ul>
-        {messages.map((message, index) => (
-          <li key={index}>{message}</li>
-        ))}
-      </ul>
-      <input
-        type="text"
-        value={messageInput}
-        onChange={(e) => setMessageInput(e.target.value)}
-      />
-      <button onClick={sendMessage}>전송</button>
-    </div>
-  );
-}
-
-export default App;
+http.listen(PORT, () => {
+  console.log(`서버가 http://localhost:${PORT} 에서 실행 중입니다.`);
+});
